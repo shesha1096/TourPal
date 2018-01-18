@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">TourPal</string>
+    <string name="login_heading">LOGIN</string>
+    <string name="email_id">Enter Your Email ID</string>
+    <string name="password">Enter Your Password</string>
+    <string name="login">Login!</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="signup">New User? Sign Up!</string>
+    <string name="login_using">Or Login Using</string>
+</resources>
