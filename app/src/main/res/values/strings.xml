@@ -4,7 +4,10 @@
     <string name="email_id">Enter Your Email ID</string>
     <string name="password">Enter Your Password</string>
     <string name="login">Login!</string>
-    <string name="forgot_password">Forgot Password?</string>
+    <string name="forgot_password">   Forgot Password?</string>
     <string name="signup">New User? Sign Up!</string>
     <string name="login_using">Or Login Using</string>
+    <string name="facebook_text">Login Using Facebook</string>
+    <string name="gmai_login">Login Using Gmail</string>
+    <string name="or_name">OR</string>
 </resources>

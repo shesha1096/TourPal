@@ -10,10 +10,9 @@ public class LoginAndSignUp extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        TextView forgotpassword = (TextView) findViewById(R.id.forgotPasswordID);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_and_sign_up);
-        forgotpassword.setPaintFlags(forgotpassword.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
 
     }
 }
