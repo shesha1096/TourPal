@@ -10,4 +10,8 @@
     <string name="facebook_text">Login Using Facebook</string>
     <string name="gmai_login">Login Using Gmail</string>
     <string name="or_name">OR</string>
+    <string name="signup_title">SIGN UP</string>
+    <string name="enter_name">Enter Your Name</string>
+    <string name="reenter_pwd">Re-enter Password</string>
+    <string name="create_account">Create Account</string>
 </resources>
