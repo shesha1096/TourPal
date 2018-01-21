@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/quick_guide"
+            android:icon="@drawable/quickguide"
+            android:title="Quick Guide" />
+        <item
+            android:id="@+id/image_recognition"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Image Recognition" />
+        <item
+            android:id="@+id/contactus"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Contact Us" />
+    </group>
+
+
+</menu>
