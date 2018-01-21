@@ -14,4 +14,22 @@
     <string name="enter_name">Enter Your Name</string>
     <string name="reenter_pwd">Re-enter Password</string>
     <string name="create_account">Create Account</string>
+    <string name="title_activity_home_page">HomePage</string>
+    <string name="welcome_text">Welcome,</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="trouble_traveling">Have Trouble Traveling?</string>
+    <string name="weather_condition">What is your preferred weather condition?</string>
+    <string name="weather_hint">Eg-Hot,Cold,Rainy</string>
+    <string name="distance_question">How far do you want to travel?</string>
+    <string name="distance_hint">Enter the distance in kms</string>
+    <string name="duration">Enter your duration of stay</string>
+    <string name="enteredduration">Enter number of days</string>
+    <string name="cbf_button">Help Me</string>
+    <string name="where_question">Where Do You Want To Go?</string>
+    <string name="destination_name">Enter Destination</string>
+    <string name="or_login">Login Using</string>
 </resources>
