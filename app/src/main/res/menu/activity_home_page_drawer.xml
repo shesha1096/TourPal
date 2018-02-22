@@ -5,18 +5,20 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/quick_guide"
-            android:icon="@drawable/quickguide"
+            android:id="@+id/quickguide"
+            android:icon="@drawable/quickguide64"
             android:title="Quick Guide" />
         <item
-            android:id="@+id/image_recognition"
-            android:icon="@drawable/ic_menu_gallery"
+            android:id="@+id/imagerecognition"
+            android:icon="@drawable/imagerecog644"
             android:title="Image Recognition" />
         <item
             android:id="@+id/contactus"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Contact Us" />
+
     </group>
+
 
 
 </menu>

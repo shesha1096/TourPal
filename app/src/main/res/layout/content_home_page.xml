@@ -6,53 +6,54 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.shesha.tourpal.HomePage"
-    tools:showIn="@layout/app_bar_home_page"
-    android:id="@+id/quickguide">
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/chatBotID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="41dp"
-        android:layout_marginEnd="36dp"
-        android:clickable="true"
-        app:srcCompat="@android:color/background_dark"
-        tools:layout_editor_absoluteX="301dp"
-        tools:layout_editor_absoluteY="440dp"
-        android:foregroundGravity="bottom"/>
-
-    <TextView
-        android:id="@+id/whereID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
-        android:text="@string/where_question"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/entereddestinationID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/whereID"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="21dp"
-        android:ems="10"
-        android:hint="@string/destination_name"
-        android:inputType="textPersonName" />
-
-    <android.support.v4.view.ViewPager
+    tools:showIn="@layout/app_bar_home_page">
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="58dp" />
+        android:id="@+id/screen_area">
 
+
+        <TextView
+            android:id="@+id/wheredestination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="80dp"
+            android:paddingTop="50dp"
+            android:text="Where Do You Want To Go?"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/destinationID"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:paddingTop="100dp"
+            android:hint="@string/city_name"
+
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/searchbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/confirm_text"
+            android:background="@drawable/round"
+            android:textColor="@color/White"
+            android:layout_gravity="center"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            app:backgroundTint="@android:color/background_light"
+            app:srcCompat="@drawable/chatbot32"
+            />
+
+
+    </FrameLayout>
 
 </RelativeLayout>

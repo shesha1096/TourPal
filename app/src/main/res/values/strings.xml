@@ -16,6 +16,16 @@
     <string name="create_account">Create Account</string>
     <string name="title_activity_home_page">HomePage</string>
     <string name="welcome_text">Welcome,</string>
+    <string name="confirm_text">Confirm</string>
+    <string name="makeitinerary">Show Itinerary</string>
+    <string name="forgotpwd">Forgot Password?</string>
+    <string name="verify">Verify</string>
+    <string name="otp">Enter  OTP</string>
+    <string name="cancel">Cancel</string>
+    <string name="verification">Account Verification</string>
+    <string name="facebook_app_id">1789031031147868</string>
+    <string name="fb_login_protocol_scheme">fb1789031031147868</string>
+
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -32,4 +42,20 @@
     <string name="where_question">Where Do You Want To Go?</string>
     <string name="destination_name">Enter Destination</string>
     <string name="or_login">Login Using</string>
+    <string name="contacttitle">Contact Us</string>
+    <string name="city_name">Enter City Name</string>
+    <string name="havetrouble">Have Trouble Traveling?</string>
+    <string name="durationoftravel">Enter Duration Of Vacation</string>
+    <string name="help_me">Reveal Meaning</string>
+    <string name="enteredcity">CITY NAME</string>
+    <string name="highlights">City Highlights</string>
+    <string name="placename">Place Name</string>
+    <string name="enterverifcode">Enter Verification Code sent to your Phone No</string>
+    <string name="phone_no">Enter Your Phone No.</string>
+    <string name="num">Enter Your Number Here</string>
+    <string name="resettitle">Reset Password</string>
+    <string name="enternew">Enter New Password Here</string>
+    <string name="reentry">Confirm Password</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="click_here">Click Here For Place Picker</string>
 </resources>
