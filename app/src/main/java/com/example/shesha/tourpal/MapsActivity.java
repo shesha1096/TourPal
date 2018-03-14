@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -34,8 +35,22 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,View.OnClickListener {
@@ -190,7 +205,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             case R.id.B_search:
 
 
-
                 mMap.clear();
                 String URL = getURL(latitude, longitude, cityname);
                 datatransfer[0] = mMap;
@@ -199,10 +213,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 getNearbyPlacesData = new GetNearbyPlacesData();
                 getNearbyPlacesData.execute(datatransfer);
                 Toast.makeText(MapsActivity.this, "Showing Tourist Locations", Toast.LENGTH_SHORT).show();
+
                 break;
             case R.id.itineraryID:
                 Intent intent = new Intent(MapsActivity.this,CityDetails.class);
+
                 intent.putExtra("City",cityname);
+                intent.putExtra("Place List",getNearbyPlacesData.names);
+                intent.putExtra("Size",String.valueOf(getNearbyPlacesData.n));
                 startActivity(intent);
 
 
@@ -253,7 +271,218 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //googleplaceUrl.append("&type="+nearbyPlace);
         //googleplaceUrl.append("&sensor=true");
         //googleplaceUrl.append("&key=AIzaSyDrBnWvFcPXlfot0WOTfD6v3ZjUJyC5fjI");
-        String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+nearbyPlace+"+point+of+interest&language=en&key=AIzaSyDrBnWvFcPXlfot0WOTfD6v3ZjUJyC5fjI";
+       // String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+nearbyPlace+"+point+of+interest&language=en&key=AIzaSyDrBnWvFcPXlfot0WOTfD6v3ZjUJyC5fjI";
+        String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+nearbyPlace+"+tourist+places+&language=en&radius=10000&key=AIzaSyDrBnWvFcPXlfot0WOTfD6v3ZjUJyC5fjI";
         return url;
+
     }
+    private static class GetNearbyPlacesData extends AsyncTask<Object,String,String>{
+        String googleplacesdata;
+        GoogleMap mMap;
+        String url;
+        DataParser parser = new DataParser();
+        double distancematrix[][];
+        String parsedDistance;
+        String response;
+        double cost=0.0;
+        int n;
+        int completed[],completed2[];
+        int z=0;
+        String distance2;
+        String names[];
+
+
+
+
+
+        @Override
+        protected String doInBackground(Object... objects) {
+            mMap = (GoogleMap) objects[0];
+            url = (String) objects[1];
+            DownloadUrl downloadURL = new DownloadUrl();
+            googleplacesdata = downloadURL.readurl(url);
+
+            return googleplacesdata;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            List<HashMap<String,String>> nearbyplaceList = null;
+            nearbyplaceList = parser.parse(s);
+            showNearbyPlaces(nearbyplaceList);
+            mapData(nearbyplaceList);
+
+        }
+
+        private void mapData(List<HashMap<String, String>> nearbyplaceList) {
+            n=nearbyplaceList.size();
+
+
+            completed=new int[n+10];    //won't give index out of bound exception if we save some extra space
+            completed2=new int[n+10];
+
+            distancematrix = new double[nearbyplaceList.size()][nearbyplaceList.size()];
+            names = new String[n+10];
+
+            for(int i = 0; i<nearbyplaceList.size(); i++) {
+                HashMap<String,String> googleplace = nearbyplaceList.get(i);
+                Iterator iterator = googleplace.entrySet().iterator();
+                Map.Entry pair = (Map.Entry) iterator.next();
+                names[i] = googleplace.get(pair.getKey());
+
+
+
+                double lat = Double.parseDouble(googleplace.get("lat"));
+                double lng = Double.parseDouble(googleplace.get("lng"));
+                for(int j=0; j<nearbyplaceList.size(); j++){
+                    HashMap<String,String> gplace = nearbyplaceList.get(j);
+                    double lat1 = Double.parseDouble(gplace.get("lat"));
+                    double lng1 = Double.parseDouble(gplace.get("lng"));
+                    String parsedDistance = getDistance(lat, lng, lat1, lng1);
+
+                        distancematrix[i][j] = Double.valueOf(parsedDistance).doubleValue();
+                        //Log.d("Distance",String.valueOf(distancematrix[i][j]));
+
+
+                }
+
+
+            }
+            for (int i = 0; i < n; i++) {
+                completed[i]=0;
+                completed2[i]=0;
+            }
+
+            mincost(0);
+             for(int i = 0;i<n;i++){
+            Log.d("Place name",names[i]);
+             Log.d("Reorder",names[completed2[i]]);
+             }
+
+
+        }
+
+        private void mincost(int city) {
+            completed[city]=1;
+            completed2[z]=city;
+
+            Log.d("Route",String.valueOf(completed2[z]));   //completed2[] holds the order in which places should be visited
+            z++;
+            int i,ncity;
+            ncity=least(city);
+            if(ncity==999)
+            {
+                ncity=0;
+
+                cost+=distancematrix[city][ncity];
+
+                return;
+            }
+            mincost(ncity);
+
+        }
+
+        private int least(int c) {
+            int i,nc=999;
+            double min=999,kmin=0.0;
+
+            for(i=0;i < n;i++)
+            {
+                if((distancematrix[c][i]!=0)&&(completed[i]==0))
+                    if(distancematrix[c][i]+distancematrix[i][c] < min)
+                    {
+                        min=distancematrix[i][0]+distancematrix[c][i];
+                        kmin=distancematrix[c][i];
+                        nc=i;
+                    }
+            }
+
+            if(min!=999)
+                cost+=kmin;
+
+            return nc;
+
+        }
+
+
+        private String getDistance(final double lat, final double lng, final double lat1, final double lng1) {
+
+
+
+            Thread thread=new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+
+
+                        URL url = new URL("http://maps.googleapis.com/maps/api/directions/json?origin=" + lat + "," + lng + "&destination=" + lat1 + "," + lng1 + "&sensor=false&units=metric&mode=driving");
+                        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.setRequestMethod("POST");
+                        InputStream in = new BufferedInputStream(conn.getInputStream());
+                        response = org.apache.commons.io.IOUtils.toString(in, "UTF-8");
+                        Log.d("Map Route",response);
+
+                        JSONObject jsonObject = new JSONObject(response);
+                        JSONArray array = jsonObject.getJSONArray("routes");
+                        JSONObject routes = array.getJSONObject(0);
+                        JSONArray legs = routes.getJSONArray("legs");
+                        JSONObject steps = legs.getJSONObject(0);
+                        JSONObject distance = steps.getJSONObject("distance");
+                        parsedDistance=distance.getString("text");
+                        char ch = parsedDistance.charAt(0);
+                        distance2 = parsedDistance.substring(parsedDistance.indexOf(ch),parsedDistance.indexOf(" "));
+                        Log.d("Distance",distance2);
+
+
+
+
+
+                        // Log.d("numberOnly",numberOnly);
+                        //Log.d("Distance",parsedDistance);
+
+                    } catch (ProtocolException e) {
+                        e.printStackTrace();
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            thread.start();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return distance2;
+
+        }
+
+
+        private void showNearbyPlaces(List<HashMap<String,String>> nearbyPlaceList){
+            for(int i = 0; i<nearbyPlaceList.size(); i++){
+                MarkerOptions markerOptions = new MarkerOptions();
+                HashMap<String,String> googleplace = nearbyPlaceList.get(i);
+                String placename = googleplace.get("place_name");
+                String vicinity = googleplace.get("vicinity");
+                double lat = Double.parseDouble(googleplace.get("lat"));
+                double lng = Double.parseDouble(googleplace.get("lng"));
+                LatLng latLng = new LatLng(lat,lng);
+                markerOptions.position(latLng);
+                markerOptions.title(placename + ":" +vicinity);
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                mMap.addMarker(markerOptions);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+            }
+        }
+
+
+    }
+
+
+
+
 }

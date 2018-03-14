@@ -11,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -237,6 +238,7 @@ public class HomePage extends AppCompatActivity
                 Place place = PlacePicker.getPlace(HomePage.this,data);
                 Intent intent = new Intent(HomePage.this,MapsActivity.class);
                 intent.putExtra("City Name",place.getName());
+                Log.d("Attributions",place.getId());
                 startActivity(intent);
             }
 
