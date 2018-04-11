@@ -2,6 +2,7 @@ package com.example.shesha.tourpal;
 
 import android.*;
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -11,6 +12,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -26,6 +29,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.shesha.tourpal.Adapter.CustomSwipeAdapter;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -40,13 +44,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.unity3d.player.UnityPlayerActivity;
+
+
 
 public class HomePage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    ViewPager viewPager;
+    CustomSwipeAdapter adapter;
     private static final int MY_PERMISSION_FINE_LOCATION = 101;
     private static final int PLACE_PICKER_REQUEST = 1;
-    private TextView dest;
-    private EditText cityname;
     private Button confirmButton;
     private FirebaseAuth mAuth;
     private TextView welcomename;
@@ -56,6 +63,8 @@ public class HomePage extends AppCompatActivity
     private FirebaseUser user;
     private LatLng latLng;
     private Marker marker;
+    private static final int REQUEST_CODE = 1;
+    private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 2;
 
 
 
@@ -66,11 +75,12 @@ public class HomePage extends AppCompatActivity
         requestPermission();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        dest = (TextView) findViewById(R.id.wheredestination);
-        cityname = (EditText) findViewById(R.id.destinationID);
-        confirmButton = (Button) findViewById(R.id.searchbutton);
+        confirmButton = (Button) findViewById(R.id.confirmBtn);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        adapter = new CustomSwipeAdapter(HomePage.this);
+        viewPager.setAdapter(adapter);
+
         mAuth = FirebaseAuth.getInstance();
-        String userid = mAuth.getCurrentUser().getUid();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Email ID");
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -159,6 +169,7 @@ public class HomePage extends AppCompatActivity
                     finish();
                 }
                 break;
+
         }
     }
 
@@ -208,14 +219,36 @@ public class HomePage extends AppCompatActivity
                 fragment = new QuickGuide();
 
                 break;
-            case R.id.imagerecognition : fragment = new ImageRecognition(); break;
+            case R.id.imagerecognition :
+
+                startActivity(new Intent(HomePage.this,CaptureActivity.class));
+
+
+
+
+
+            break;
             case R.id.contactus : fragment = new ContactUs(); break;
+            case R.id.logout : {
+                mAuth.signOut();
+                startActivity(new Intent(HomePage.this,LoginAndSignUp.class));
+                finish();
+            }
+            break;
+            case R.id.agreality:
+
+                Intent intent = new Intent(HomePage.this, com.example.shesha.tourpal.UnityPlayerActivity.class);
+                intent.putExtra("Message","Hello");
+                intent.putExtra("Value",123);
+                //startActivity(intent);
+                startActivityForResult(intent,REQUEST_CODE);
+                break;
+
 
         }
         if(fragment!=null)
         {
-            dest.setVisibility(View.GONE);
-            cityname.setVisibility(View.GONE);
+            viewPager.setVisibility(View.GONE);
             confirmButton.setVisibility(View.GONE);
             android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
             android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -234,14 +267,25 @@ public class HomePage extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == PLACE_PICKER_REQUEST){
-            if(resultCode == RESULT_OK){
-                Place place = PlacePicker.getPlace(HomePage.this,data);
-                Intent intent = new Intent(HomePage.this,MapsActivity.class);
-                intent.putExtra("City Name",place.getName());
-                Log.d("Attributions",place.getId());
+            if(resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(HomePage.this, data);
+                Intent intent = new Intent(HomePage.this, MapsActivity.class);
+                intent.putExtra("City Name", place.getName());
+                Log.d("Attributions", place.getId());
                 startActivity(intent);
+                if (requestCode == REQUEST_CODE)
+                    if (resultCode == RESULT_OK) {
+                        String message = data.getStringExtra("Message");
+                        Toast.makeText(HomePage.this, message, Toast.LENGTH_LONG).show();
+                    }
+
+
+            }
+
             }
 
         }
+
     }
-}
+
+

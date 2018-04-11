@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.shesha.tourpal.Model.Place;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -21,11 +22,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 
@@ -44,6 +47,7 @@ public class PlaceDescription extends AppCompatActivity {
     String placename;
     private static final int GALLERY_PICK = 1;
     private FirebaseFirestore firebaseFirestore;
+    private String imgurl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,82 +62,20 @@ public class PlaceDescription extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
          placename = extras.getString("Place Name");
         String placedescription = extras.getString("Place Description");
+        imgurl = extras.getString("Image URL");
+        Uri uri = Uri.parse(imgurl);
+        Picasso.with(PlaceDescription.this).load(imgurl).placeholder(R.drawable.common_google_signin_btn_icon_dark).into(imagedesc);
+        Toast.makeText(PlaceDescription.this,uri.toString(),Toast.LENGTH_SHORT).show();
         placetitle.setText(placename);
         placedesc.setText(placedescription);
 
-    }
-
-    public void selectImage(View view) {
-        Intent galleryIntent = new Intent();
-        galleryIntent.setType("image/*");
-        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(galleryIntent,"Select Image"),GALLERY_PICK);
-       /* CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .start(PlaceDescription.this);*/
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == GALLERY_PICK){
-            if(resultCode == RESULT_OK){
-                final Uri imageuri = data.getData();
-                StorageReference filepath = storageReference.child("Mangaluru").child(placename+".jpg");
-                filepath.putFile(imageuri).addOnCompleteListener(PlaceDescription.this, new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if(task.isSuccessful()){
-
-                                Toast.makeText(PlaceDescription.this,"Saved",Toast.LENGTH_SHORT).show();
-                                String downloadurl = task.getResult().getDownloadUrl().toString();
-                                final DocumentReference doc = firebaseFirestore.collection("Mangaluru").document(placename);
-                                HashMap<String,String> imageHashmap = new HashMap<>();
-                                imageHashmap.put("image",downloadurl);
-
-                                firebaseFirestore.collection("Mangaluru").document(placename).set(imageHashmap, SetOptions.merge()).addOnCompleteListener(PlaceDescription.this, new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if(task.isSuccessful()){
-                                            Toast.makeText(PlaceDescription.this," Successful",Toast.LENGTH_SHORT).show();
-                                        }else{
-                                            Toast.makeText(PlaceDescription.this,"Failed",Toast.LENGTH_SHORT).show();
-                                        }
-
-                                    }
-                                });
-                        }else{
-                            Toast.makeText(PlaceDescription.this,"Failure",Toast.LENGTH_SHORT).show();
-                        }
-
-                        }
 
 
-                });
-                Toast.makeText(PlaceDescription.this,imageuri.toString(),Toast.LENGTH_SHORT).show();
-                final DocumentReference docRef = firebaseFirestore.collection("Mangaluru").document(placename);
-                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document != null && document.exists()) {
-                                Toast.makeText(PlaceDescription.this,"Description Data: "+document.get("description"),Toast.LENGTH_SHORT).show();
-
-                            } else {
-                                Toast.makeText(PlaceDescription.this,"Could Not Get Data",Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(PlaceDescription.this, "Could Not Get Data", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
-            }
 
 
-            }
-        }
+
     }
 

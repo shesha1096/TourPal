@@ -23,7 +23,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:onClick="selectImage"
         android:paddingTop="20dp"
         android:src="@drawable/chatbot64" />
 

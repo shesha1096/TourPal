@@ -25,7 +25,7 @@
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.149" />
+        app:layout_constraintVertical_bias="0.198" />
 
     <EditText
         android:id="@+id/enteremailID"
@@ -46,19 +46,19 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="53dp"
-        android:layout_height="45dp"
+        android:layout_width="82dp"
+        android:layout_height="66dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.017"
-        app:srcCompat="@drawable/logo" />
+        app:srcCompat="@drawable/newtourpallogo" />
 
     <TextView
         android:id="@+id/orTextID"
@@ -120,7 +120,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/round_second"
+        android:background="@android:color/transparent"
         android:text="New User? Sign Up"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -138,7 +138,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/round_second"
+        android:background="@android:color/transparent"
         android:text="Forgot Password?"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -173,7 +173,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:background="@drawable/fb"
+        android:background="@drawable/loginfb"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.836"

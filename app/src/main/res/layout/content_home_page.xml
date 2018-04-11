@@ -11,36 +11,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/screen_area">
-
-
-        <TextView
-            android:id="@+id/wheredestination"
-            android:layout_width="wrap_content"
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="80dp"
-            android:paddingTop="50dp"
-            android:text="Where Do You Want To Go?"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:id="@+id/viewPager">
 
-        <EditText
-            android:id="@+id/destinationID"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:paddingTop="100dp"
-            android:hint="@string/city_name"
-
-            android:inputType="textPersonName" />
-
+        </android.support.v4.view.ViewPager>
         <Button
-            android:id="@+id/searchbutton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/confirm_text"
             android:background="@drawable/round"
-            android:textColor="@color/White"
-            android:layout_gravity="center"/>
+            android:text="Search for a place"
+            android:id="@+id/confirmBtn"
+            android:layout_marginTop="450dp"/>
+
+
+
+
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"

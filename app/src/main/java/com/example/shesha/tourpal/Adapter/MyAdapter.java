@@ -35,6 +35,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
     private String name;
     private FirebaseFirestore firebaseFirestore;
     private String desc;
+    private String imgurl;
     ItineraryRow row;
 
     public MyAdapter(Context context, List<ItineraryRow> listItems,String name) {
@@ -91,6 +92,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
                         DocumentSnapshot documentSnapshot = task.getResult();
                         if(documentSnapshot!=null && documentSnapshot.exists()) {
                             desc = documentSnapshot.getString("description");
+                            imgurl = documentSnapshot.getString("image");
                             Log.d("Text", desc);
                         }else{
                             desc = "There is no description available for this place currently.";
@@ -99,6 +101,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>
                         Intent intent = new Intent(context, PlaceDescription.class);
                             intent.putExtra("Place Name",row.getPlaceName());
                             intent.putExtra("Place Description",desc);
+                            intent.putExtra("Image URL",imgurl);
                             context.startActivity(intent);
 
 

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,43 +25,21 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class ImageRecognition extends Fragment {
-    static final int REQUEST_IMAGE_CAPTURE  =1;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
     public ImageView cameraview;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.image_recognition,null);
+        return inflater.inflate(R.layout.image_recognition, null);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Button buttonid =  (Button) view.findViewById(R.id.myCameraID);
-        cameraview = (ImageView) view.findViewById(R.id.cameraimgid);
-        if (!getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-            buttonid.setEnabled(false);
-        }
-        buttonid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent,REQUEST_IMAGE_CAPTURE);
 
-            }
-        });
+
 
     }
 
 
-
-   
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==REQUEST_IMAGE_CAPTURE && resultCode==RESULT_OK)
-        {
-            Bundle extras = data.getExtras();
-            Bitmap photo = (Bitmap) extras.get("data");
-            cameraview.setImageBitmap(photo);
-        }
-    
-    }
 }

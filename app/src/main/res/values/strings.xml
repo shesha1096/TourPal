@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">TourPal</string>
     <string name="login_heading">LOGIN</string>
-    <string name="email_id">Enter Your Email ID</string>
-    <string name="password">Enter Your Password</string>
+    <string name="email_id">Enter your email ID</string>
+    <string name="password">Enter your password</string>
     <string name="login">Login!</string>
     <string name="forgot_password">   Forgot Password?</string>
     <string name="signup">New User? Sign Up!</string>
@@ -11,8 +11,8 @@
     <string name="gmai_login">Login Using Gmail</string>
     <string name="or_name">OR</string>
     <string name="signup_title">SIGN UP</string>
-    <string name="enter_name">Enter Your Name</string>
-    <string name="reenter_pwd">Re-enter Password</string>
+    <string name="enter_name">Enter your name</string>
+    <string name="reenter_pwd">Re-enter password</string>
     <string name="create_account">Create Account</string>
     <string name="title_activity_home_page">HomePage</string>
     <string name="welcome_text">Welcome,</string>
@@ -33,7 +33,7 @@
     <string name="action_settings">Settings</string>
     <string name="trouble_traveling">Have Trouble Traveling?</string>
     <string name="weather_condition">What is your preferred weather condition?</string>
-    <string name="weather_hint">Eg-Hot,Cold,Rainy</string>
+    <string name="weather_hint">Eg-Hot,cold,rainy</string>
     <string name="distance_question">How far do you want to travel?</string>
     <string name="distance_hint">Enter the distance in kms</string>
     <string name="duration">Enter your duration of stay</string>
@@ -43,19 +43,21 @@
     <string name="destination_name">Enter Destination</string>
     <string name="or_login">Login Using</string>
     <string name="contacttitle">Contact Us</string>
-    <string name="city_name">Enter City Name</string>
+    <string name="city_name">Enter city name</string>
     <string name="havetrouble">Have Trouble Traveling?</string>
-    <string name="durationoftravel">Enter Duration Of Vacation</string>
+    <string name="durationoftravel">Enter duration of vacation</string>
     <string name="help_me">Reveal Meaning</string>
     <string name="enteredcity">CITY NAME</string>
     <string name="highlights">City Highlights</string>
     <string name="placename">Place Name</string>
     <string name="enterverifcode">Enter Verification Code sent to your Phone No</string>
     <string name="phone_no">Enter Your Phone No.</string>
-    <string name="num">Enter Your Number Here</string>
+    <string name="num">Enter your number here</string>
     <string name="resettitle">Reset Password</string>
-    <string name="enternew">Enter New Password Here</string>
-    <string name="reentry">Confirm Password</string>
+    <string name="enternew">Enter new password here</string>
+    <string name="reentry">Confirm password</string>
     <string name="title_activity_maps">Map</string>
     <string name="click_here">Click Here For Place Picker</string>
+    <string name="enter_here">Enter your email ID here</string>
+    <string name="enter_month">Enter your desired month of travel</string>
 </resources>

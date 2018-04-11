@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TourPal.iml" filepath="$PROJECT_DIR$/TourPal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Tourpal/Tourpal.iml" filepath="$PROJECT_DIR$/Tourpal/Tourpal.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

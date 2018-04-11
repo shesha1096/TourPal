@@ -2,6 +2,9 @@ package com.example.shesha.tourpal;
 
 import android.*;
 import android.Manifest;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -15,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -71,6 +75,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     int PROXIMITY_RADIUS = 10000;
     double latitude,longitude;
     double end_latitude, end_longitude;
+    public ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,23 +210,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             case R.id.B_search:
 
 
+
                 mMap.clear();
                 String URL = getURL(latitude, longitude, cityname);
                 datatransfer[0] = mMap;
                 datatransfer[1] = URL;
 
-                getNearbyPlacesData = new GetNearbyPlacesData();
+
+                getNearbyPlacesData = new GetNearbyPlacesData(MapsActivity.this);
                 getNearbyPlacesData.execute(datatransfer);
-                Toast.makeText(MapsActivity.this, "Showing Tourist Locations", Toast.LENGTH_SHORT).show();
+
+
+
 
                 break;
             case R.id.itineraryID:
-                Intent intent = new Intent(MapsActivity.this,CityDetails.class);
+                if(cityname.isEmpty()){
+                    Toast.makeText(MapsActivity.this,"Please Search for Nearby Places First",Toast.LENGTH_SHORT).show();
+                }else {
+                    Intent intent = new Intent(MapsActivity.this, CityDetails.class);
 
-                intent.putExtra("City",cityname);
-                intent.putExtra("Place List",getNearbyPlacesData.names);
-                intent.putExtra("Size",String.valueOf(getNearbyPlacesData.n));
-                startActivity(intent);
+                    intent.putExtra("City", cityname);
+                    intent.putExtra("Place List", getNearbyPlacesData.names);
+                    intent.putExtra("Size", String.valueOf(getNearbyPlacesData.n));
+                    startActivity(intent);
+                }
 
 
                 break;
@@ -290,10 +303,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         int z=0;
         String distance2;
         String names[];
+        private ProgressDialog progressDialog;
+        private Activity activity;
 
-
-
-
+        public GetNearbyPlacesData(Activity activity) {
+            this.activity = activity;
+        }
 
         @Override
         protected String doInBackground(Object... objects) {
@@ -306,11 +321,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(activity);
+            progressDialog.setTitle("Please Wait");
+            progressDialog.setMessage("Showing Tourist Locations");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
+        }
+
+        @Override
         protected void onPostExecute(String s) {
             List<HashMap<String,String>> nearbyplaceList = null;
             nearbyplaceList = parser.parse(s);
             showNearbyPlaces(nearbyplaceList);
             mapData(nearbyplaceList);
+            progressDialog.dismiss();
 
         }
 
@@ -476,6 +502,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                 mMap.addMarker(markerOptions);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+
             }
         }
 

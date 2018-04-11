@@ -2,12 +2,20 @@ package com.example.shesha.tourpal;
 
 import android.content.Intent;
 import android.provider.DocumentsContract;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,11 +38,12 @@ import java.util.stream.Collectors;
 public class CityDetails extends AppCompatActivity {
     private TextView city;
     private Button itineraryButton;
-    private static final String encoding = "UTF-8";
+    private FirebaseFirestore firebaseFirestore;
     private Bundle extras;
     String cityname;
     private TextView citydetails;
-    private String namelist[],response = "";
+    private String namelist[],response,imgurl;
+    private ImageView cityView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,58 +52,38 @@ public class CityDetails extends AppCompatActivity {
         city = (TextView) findViewById(R.id.citytitle);
         citydetails = (TextView) findViewById(R.id.citydescription);
         itineraryButton = (Button) findViewById(R.id.createItineraryID);
+        cityView = (ImageView) findViewById(R.id.citypic);
          extras =getIntent().getExtras();
         cityname = extras.getString("City");
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseFirestore.collection(cityname).document("citydesc").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        response = documentSnapshot.getString("description");
+                        imgurl = documentSnapshot.getString("image");
+                        Log.d("Text", response);
+                    } else {
+                        response = "There is no description available for this place currently.";
+                    }
+                }
+                citydetails.setText(response);
+                Picasso.with(CityDetails.this).load(imgurl).placeholder(R.drawable.common_google_signin_btn_icon_dark).into(cityView);
+            }
+        });
 
-        String size = extras.getString("Size");
+
+                    String size = extras.getString("Size");
         int n = Integer.parseInt(size);
         namelist = new String[n+10];
         namelist = extras.getStringArray("Place List");
         Log.d("Names List",namelist[1]);
-        Thread thread=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-
-
-
-                    String wikipediaApiJSON = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles="+cityname;
-
-                    HttpURLConnection httpcon = (HttpURLConnection) new URL(wikipediaApiJSON).openConnection();
-                    httpcon.addRequestProperty("User-Agent", "Mozilla/5.0");
-                    InputStream in = new BufferedInputStream(httpcon.getInputStream());
-                    response = org.apache.commons.io.IOUtils.toString(in, "UTF-8");
-                    JSONObject object= new JSONObject(response);
-                    JSONObject pages=object.getJSONObject("batchcomplete");
-                    Iterator keys = pages.keys();
-                    while(keys.hasNext()) {
-                        String name = (String)keys.next();
-                        JSONObject jsonObject=object.getJSONObject(name);
-
-                        String pageid=jsonObject.getString("pageid");
-                        String ns=jsonObject.getString("ns");
-                        String title=jsonObject.getString("title");
-                        String extract=jsonObject.getString("extract");
-                        Log.d("Response",extract);
-                    }
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
 
         city.setText(cityname);
-        citydetails.setText(response);
+
         itineraryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

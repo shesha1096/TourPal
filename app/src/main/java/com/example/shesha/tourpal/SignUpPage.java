@@ -33,6 +33,7 @@ public class SignUpPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_page);
+        setTitle("SignUp");
         name = (EditText) findViewById(R.id.enterNameID);
         email = (EditText) findViewById(R.id.enterEmailID);
         pwd = (EditText) findViewById(R.id.createpwdID);

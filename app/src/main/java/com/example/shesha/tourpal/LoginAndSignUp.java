@@ -67,6 +67,7 @@ public class LoginAndSignUp extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_and_sign_up);
+        setTitle("Login");
         loginButton = (Button) findViewById(R.id.loginbuttonID);
         forgotpwdButton = (Button) findViewById(R.id.forgotpwdID);
         signupbutton = (Button) findViewById(R.id.signupButton);
@@ -137,7 +138,11 @@ public class LoginAndSignUp extends AppCompatActivity implements View.OnClickLis
             }}
             break;
             case R.id.forgotpwdID: {
-                startActivity(new Intent(LoginAndSignUp.this,ForgotPassword.class));
+                if(emailID.getText().toString().isEmpty()){
+                    Toast.makeText(LoginAndSignUp.this,"Please Enter Your Email Address",Toast.LENGTH_SHORT).show();
+                }else {
+                    startActivity(new Intent(LoginAndSignUp.this, ForgotPassword.class));
+                }
 
 
 
@@ -218,7 +223,7 @@ public class LoginAndSignUp extends AppCompatActivity implements View.OnClickLis
         }
 
         // Pass the activity result back to the Facebook SDK
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+
     }
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
@@ -246,6 +251,7 @@ public class LoginAndSignUp extends AppCompatActivity implements View.OnClickLis
                         // ...
                     }
                 });
+
     }
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
