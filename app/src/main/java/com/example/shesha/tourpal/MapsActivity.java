@@ -76,6 +76,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     double latitude,longitude;
     double end_latitude, end_longitude;
     public ProgressDialog progressDialog;
+    private int flag=0;
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,9 +92,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         searchBtn = (Button) findViewById(R.id.B_search);
         confirmBtn = (Button) findViewById(R.id.itineraryID);
-        //searchtext = (EditText) findViewById(R.id.TF_location);
         extras = getIntent().getExtras();
          cityname = extras.getString("City Name");
+         email = extras.getString("email");
         searchBtn.setOnClickListener(this);
         confirmBtn.setOnClickListener(this);
 
@@ -210,7 +212,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             case R.id.B_search:
 
 
-
+                flag = 1;
                 mMap.clear();
                 String URL = getURL(latitude, longitude, cityname);
                 datatransfer[0] = mMap;
@@ -225,7 +227,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 break;
             case R.id.itineraryID:
-                if(cityname.isEmpty()){
+                if(flag==0){
                     Toast.makeText(MapsActivity.this,"Please Search for Nearby Places First",Toast.LENGTH_SHORT).show();
                 }else {
                     Intent intent = new Intent(MapsActivity.this, CityDetails.class);
@@ -233,58 +235,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     intent.putExtra("City", cityname);
                     intent.putExtra("Place List", getNearbyPlacesData.names);
                     intent.putExtra("Size", String.valueOf(getNearbyPlacesData.n));
+                    intent.putExtra("email",email);
                     startActivity(intent);
                 }
 
 
                 break;
-           /* case  R.id.B_hopistals:
-                mMap.clear();
-                String hostpital = "hospital";
-                String URL =  getURL(latitude,longitude,hostpital);
-                datatransfer[0] = mMap;
-                datatransfer[1] = URL;
-                getNearbyPlacesData = new GetNearbyPlacesData();
-                getNearbyPlacesData.execute(datatransfer);
-                Toast.makeText(MapsActivity.this,"Showing Nearby Hospitals",Toast.LENGTH_SHORT).show();
-                break;
 
-            case R.id.B_restaurants :
-                mMap.clear();
-                String restaurant = "restaurant";
-                URL =  getURL(latitude,longitude,restaurant);
-
-                datatransfer[0] = mMap;
-                datatransfer[1] = URL;
-                getNearbyPlacesData = new GetNearbyPlacesData();
-                getNearbyPlacesData.execute(datatransfer);
-                Toast.makeText(MapsActivity.this,"Showing Nearby Restaurants",Toast.LENGTH_SHORT).show();
-                break;
-            case  R.id.B_schools:
-                mMap.clear();
-                String school = "school";
-                URL =  getURL(latitude,longitude,school);
-
-                datatransfer[0] = mMap;
-                datatransfer[1] = URL;
-                getNearbyPlacesData = new GetNearbyPlacesData();
-                getNearbyPlacesData.execute(datatransfer);
-                Toast.makeText(MapsActivity.this,"Showing Nearby Schools",Toast.LENGTH_SHORT).show();
-                break;
-        }*/
         }
 
     }
 
     private String getURL(double latitude, double longitude, String nearbyPlace){
 
-        //StringBuilder googleplaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json");
-        //googleplaceUrl.append("?location="+latitude+","+longitude);
-        //googleplaceUrl.append("&radius="+PROXIMITY_RADIUS);
-        //googleplaceUrl.append("&type="+nearbyPlace);
-        //googleplaceUrl.append("&sensor=true");
-        //googleplaceUrl.append("&key=AIzaSyDrBnWvFcPXlfot0WOTfD6v3ZjUJyC5fjI");
-       // String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+nearbyPlace+"+point+of+interest&language=en&key=AIzaSyDrBnWvFcPXlfot0WOTfD6v3ZjUJyC5fjI";
         String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+nearbyPlace+"+tourist+places+&language=en&radius=10000&key=AIzaSyDrBnWvFcPXlfot0WOTfD6v3ZjUJyC5fjI";
         return url;
 
@@ -344,11 +307,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             n=nearbyplaceList.size();
 
 
-            completed=new int[n+10];    //won't give index out of bound exception if we save some extra space
-            completed2=new int[n+10];
+            completed=new int[n+2];    //won't give index out of bound exception if we save some extra space
+            completed2=new int[n+2];
 
             distancematrix = new double[nearbyplaceList.size()][nearbyplaceList.size()];
-            names = new String[n+10];
+            names = new String[n+2];
 
             for(int i = 0; i<nearbyplaceList.size(); i++) {
                 HashMap<String,String> googleplace = nearbyplaceList.get(i);

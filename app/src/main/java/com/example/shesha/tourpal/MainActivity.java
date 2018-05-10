@@ -28,7 +28,10 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         if(mUser!=null){
-            startActivity(new Intent(MainActivity.this,HomePage.class));
+            String userEmail = mUser.getEmail();
+            Intent homeIntent = new Intent(MainActivity.this,HomePage.class);
+            homeIntent.putExtra("email ID",userEmail);
+            startActivity(homeIntent);
         }else {
             new Handler().postDelayed(new Runnable() {
                 @Override

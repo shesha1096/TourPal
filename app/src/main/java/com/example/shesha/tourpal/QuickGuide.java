@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -27,16 +29,17 @@ import java.util.List;
  */
 
 public class QuickGuide extends Fragment {
-    private EditText weather;
-    private EditText distance;
-    private EditText duration;
+    private TextView weather;
+    private TextView duration;
     private EditText month;
     private Button help;
     private String weatherString;
     private String monthString;
     private String rainfall;
-    private int intMonth,userMonth;
+    private int intMonth,userMonth,intRainfall,intWeather;
     private Double temp,rain;
+    private SeekBar weatherValue;
+    private SeekBar rainValue;
 
     @Nullable
     @Override
@@ -47,22 +50,59 @@ public class QuickGuide extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        weather = (EditText) view.findViewById(R.id.weather);
-        distance = (EditText) view.findViewById(R.id.distance);
-        duration = (EditText) view.findViewById(R.id.duration);
+        weather = (TextView) view.findViewById(R.id.weather);
+        duration = (TextView) view.findViewById(R.id.duration);
         month = (EditText) view.findViewById(R.id.month_travel);
         help = (Button) view.findViewById(R.id.helpmeBtn);
+        weatherValue = (SeekBar) view.findViewById(R.id.weatherSeek);
+        rainValue = (SeekBar) view.findViewById(R.id.rainfallSeek);
         help.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    weatherString = weather.getText().toString();
+                    weatherValue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                        @Override
+                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+
+                        }
+
+                        @Override
+                        public void onStartTrackingTouch(SeekBar seekBar) {
+
+
+                        }
+
+                        @Override
+                        public void onStopTrackingTouch(SeekBar seekBar) {
+                            intWeather = seekBar.getProgress();
+                            weatherString = String.valueOf(intWeather);
+                            Log.d("Weather",weatherString);
+
+                        }
+                    });
+                    rainValue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                        @Override
+                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                        }
+
+                        @Override
+                        public void onStartTrackingTouch(SeekBar seekBar) {
+
+                        }
+
+                        @Override
+                        public void onStopTrackingTouch(SeekBar seekBar) {
+                            intRainfall = seekBar.getProgress();
+                            rainfall = String.valueOf(intRainfall);
+                            Log.d("Rainfall",rainfall);
+
+                        }
+                    });
                     monthString = month.getText().toString();
                     userMonth = Integer.valueOf(monthString);
                     Log.d("Month",monthString);
-                    rainfall = duration.getText().toString();
-                    Log.d("Rainfall",rainfall);
-                    Log.d("Weather",weatherString);
                     getData();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -70,6 +110,7 @@ public class QuickGuide extends Fragment {
 
             }
         });
+
 
 
 
@@ -137,17 +178,22 @@ public class QuickGuide extends Fragment {
                 Double maxtemp = climate.getMeantempmax();
                 Double mintemp = climate.getMeantempmin();
                 temp = maxtemp - mintemp;
-                Double abs = Double.parseDouble(rainfall) * rain + Double.parseDouble(weatherString) * temp + userMonth * intMonth;
-                Double denom1 = Math.sqrt(Math.pow(Double.parseDouble(rainfall), 2) + Math.pow(Double.parseDouble(weatherString), 2) + Math.pow(userMonth, 2));
+                Double abs = intRainfall * rain + intWeather * temp + userMonth * intMonth;
+                Double denom1 = Math.sqrt(Math.pow((double)intRainfall, 2) + Math.pow((double)intWeather, 2) + Math.pow(userMonth, 2));
                 Double denom2 = Math.sqrt(Math.pow(temp, 2) + Math.pow(rain, 2) + Math.pow(intMonth, 2));
                 Double denom = denom1 * denom2;
                 Double cosine_similarity = abs / denom;
+                if(cosine_similarity>=0.80){
+                    climateList1.add(climate);
+                    Log.d("Selected",climate.getStationname());
+                }
                 Log.d("Climate", cosine_similarity.toString());
                 Log.d("Place",climate.getStationname());
 
             }
         }
+
     }
-
-
+    Intent cityIntent = new Intent(getActivity(),CityList.class);
+    
 }

@@ -1,6 +1,8 @@
 package com.example.shesha.tourpal;
 
-class Climate {
+import java.io.Serializable;
+
+class Climate implements Serializable{
     private String stationname;
     private String month;
     private String period;

@@ -45,7 +45,7 @@
     <string name="contacttitle">Contact Us</string>
     <string name="city_name">Enter city name</string>
     <string name="havetrouble">Have Trouble Traveling?</string>
-    <string name="durationoftravel">Enter duration of vacation</string>
+    <string name="durationoftravel">Enter the amount of rainfall you want to expect(in mm)</string>
     <string name="help_me">Reveal Meaning</string>
     <string name="enteredcity">CITY NAME</string>
     <string name="highlights">City Highlights</string>
@@ -60,4 +60,32 @@
     <string name="click_here">Click Here For Place Picker</string>
     <string name="enter_here">Enter your email ID here</string>
     <string name="enter_month">Enter your desired month of travel</string>
+    <string name="click_blog">Click here to open blogs</string>
+    <string name="click_chat">Click here to chat with users</string>
+    <string name="click_chats">Click here to open chats</string>
+    <string name="newpost_desc">Enter your description here</string>
+    <string name="addpost">Add Post</string>
+    <string name="bottom_home_text">Home</string>
+    <string name="bottom_notif_text">Notification</string>
+    <string name="bottom_account">Account</string>
+    <string-array name="translate">
+        <item>English</item>
+        <item>Hindi</item>
+        <item>Kannada</item>
+        <item>Telugu</item>
+        <item>Tamil</item>
+        <item>Marathi</item>
+        <item>Bengali</item>
+        <item>Malayalam</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="based_on">You may also want to visit:</string>
+    <string name="still_having_trouble">Still having trouble? Go here</string>
+    <string name="title">(Android WebSockets Chat App)</string>
+    <string name="author_name">By Ravi Tamada</string>
+    <string name="author_url">www.androidhive.info</string>
+    <string name="btn_join">JOIN</string>
+    <string name="btn_send">Send</string>
 </resources>

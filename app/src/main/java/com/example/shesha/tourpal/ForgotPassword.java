@@ -29,6 +29,8 @@ public class ForgotPassword extends AppCompatActivity {
     private EditText input;
     int num = 0;
     private AlertDialog dialog;
+    private Bundle extras;
+    private String emailString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,8 @@ public class ForgotPassword extends AppCompatActivity {
         setContentView(R.layout.activity_forgot_password);
         email = (EditText) findViewById(R.id.forgot_emailID);
         forgot_btn = (Button) findViewById(R.id.otpButtonID);
+        extras = getIntent().getExtras();
+        emailString = extras.getString("email");
         final AlertDialog.Builder builder = new AlertDialog.Builder(ForgotPassword.this);
         forgot_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +69,9 @@ public class ForgotPassword extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         String otp = input.getText().toString();
                         if(Integer.parseInt(otp) == num){
-                            startActivity(new Intent(ForgotPassword.this,ResetPassword.class));
+                            Intent resIntent = new Intent(ForgotPassword.this,ResPwd.class);
+                            resIntent.putExtra("email",emailString);
+                            startActivity(resIntent);
 
                         }else{
                             Toast.makeText(ForgotPassword.this,"Wrong OTP",Toast.LENGTH_SHORT).show();

@@ -10,20 +10,31 @@
             android:title="Quick Guide" />
         <item
             android:id="@+id/imagerecognition"
-            android:icon="@drawable/imagerecog644"
+            android:icon="@mipmap/action_imagerecog"
             android:title="Image Recognition" />
+
         <item
-            android:id="@+id/contactus"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Contact Us" />
+            android:id="@+id/langtranslate"
+            android:icon="@mipmap/action_lang"
+            android:title="Translator"
+            />
         <item
             android:id="@+id/agreality"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@mipmap/action_augreality"
             android:title="Augmented Reality" />
         <item
+            android:id="@+id/profileactivity"
+            android:icon="@mipmap/action_person"
+            android:title="Profile Activity" />
+        <item
+            android:id="@+id/contactus"
+            android:icon="@mipmap/action_contactus"
+            android:title="Contact Us" />
+        <item
             android:id="@+id/logout"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/exirt"
             android:title="Sign Out" />
+
 
     </group>
 

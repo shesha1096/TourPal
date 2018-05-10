@@ -5,10 +5,10 @@ buildscript {
     repositories {
         google()
         jcenter()
-        mavenCentral()
+
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.0'
+        classpath 'com.android.tools.build:gradle:3.1.2'
 
 
 
@@ -24,8 +24,23 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven {
+            url "https://github.com/QuickBlox/quickblox-android-sdk-releases/raw/master/"
+
+        }
+        maven {
+            url "https://jitpack.io"
+
+        }
+        maven {
+            url "https://github.com/codebutler/android-websockets/tree/master/src/main/java/com/codebutler/android_websockets"
+
+        }
+
     }
 }
+
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir

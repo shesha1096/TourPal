@@ -7,8 +7,17 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+
+    <!-- START Added for GCM -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <permission
+        android:name="com.example.shesha.tourpal.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="info.androidhive.gcm.permission.C2D_MESSAGE" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -16,7 +25,9 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
-    <uses-feature android:name="android.hardware.touchscreen.multitouch.distinct" android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen.multitouch.distinct"
+        android:required="false" />
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -46,16 +57,23 @@
         <activity android:name=".CityDetails" />
         <activity android:name=".Itinerary" />
         <activity android:name=".PlaceDescription" />
-        <activity android:name=".UnityPlayerActivity"
-            />
+        <activity android:name=".UnityPlayerActivity" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-        <meta-data android:name="unityplayer.ForwardNativeEventsToDalvik" android:value="true" />
-        <meta-data android:name="unity.splash-mode" android:value="0" />
-        <meta-data android:name="unity.splash-enable" android:value="True" />
-        <meta-data android:name="android.max_aspect" android:value="2.1" />
+        <meta-data
+            android:name="unityplayer.ForwardNativeEventsToDalvik"
+            android:value="true" />
+        <meta-data
+            android:name="unity.splash-mode"
+            android:value="0" />
+        <meta-data
+            android:name="unity.splash-enable"
+            android:value="True" />
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.1" />
 
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -74,9 +92,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ForgotPassword" />
-        <activity android:name=".ResetPassword"/>
-        <activity android:name=".CaptureActivity"/>
-        <activity android:name=".HelpActivity"/>
+        <activity android:name=".CaptureActivity" />
+        <activity android:name=".HelpActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -94,12 +111,55 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
+            android:label="@string/title_activity_maps" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+        <activity android:name=".CityList" />
+        <activity android:name=".CityQuickGuide" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".BlogPostsActivity" />
+        <activity android:name=".PostActivity" />
+        <activity android:name=".CommentsActivity" />
+        <activity android:name=".CityIntermediate" />
+        <activity android:name=".ChatBotActivity" />
+        <activity android:name=".ResPwd" />
+        <activity android:name=".LanguageTranslator" />
+        <activity android:name=".UsersActivity" />
+        <activity android:name=".ChangeStatus" />
+        <activity android:name=".ChatActivity" />
+        <activity android:name=".ChatDialogsActivity" />
+        <activity android:name=".ListUsersActivity" />
+        <activity android:name=".ChatMessaeActivity" />
+        <activity android:name=".GroupChatActivity">
 
         </activity>
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
+        <receiver
+        android:name="com.google.android.gms.gcm.GcmReceiver"
+        android:exported="true"
+        android:permission="com.google.android.c2dm.permission.SEND">
+        <intent-filter>
+            <action android:name="com.google.android.c2dm.intent.RECEIVE" />
 
+            <category android:name="info.androidhive.gcm" />
+        </intent-filter>
+    </receiver>
+
+    <service
+        android:name=".gcm.MyGcmPushReceiver"
+        android:exported="false">
+        <intent-filter>
+            <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+        </intent-filter>
+    </service>
+
+    <service
+        android:name=".gcm.GcmIntentService"
+        android:exported="false">
+        <intent-filter>
+            <action android:name="com.google.android.gms.iid.InstanceID" />
+        </intent-filter>
+    </service>
     </application>
 
 </manifest>

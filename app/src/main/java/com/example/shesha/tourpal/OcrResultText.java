@@ -17,6 +17,7 @@ package com.example.shesha.tourpal;
 
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.util.Log;
 
 import java.util.List;
 
@@ -45,6 +46,7 @@ public final class OcrResultText {
                    List<Rect> wordBoundingBoxes,
                    List<Rect> characterBoundingBoxes) {
     this.text = text;
+    Log.d("OCR Text",text);
     this.wordConfidences = wordConfidences;
     this.meanConfidence = meanConfidence;
     this.bitmapDimensions = bitmapDimensions;

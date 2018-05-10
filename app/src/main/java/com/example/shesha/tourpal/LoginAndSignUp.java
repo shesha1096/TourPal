@@ -40,9 +40,12 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class LoginAndSignUp extends AppCompatActivity implements View.OnClickListener{
@@ -95,6 +98,7 @@ public class LoginAndSignUp extends AppCompatActivity implements View.OnClickLis
                 user = firebaseAuth.getCurrentUser();
                 if(user!=null)
                 {
+
                     Toast.makeText(LoginAndSignUp.this,"Signed In",Toast.LENGTH_LONG).show();
                 }else{
                     Toast.makeText(LoginAndSignUp.this," Not Signed In",Toast.LENGTH_LONG).show();
@@ -126,10 +130,11 @@ public class LoginAndSignUp extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(!task.isSuccessful()){
+
                             Toast.makeText(LoginAndSignUp.this,"Enter a valid email ID and Password",Toast.LENGTH_LONG).show();
                         }else{
                              Intent intent = new Intent(LoginAndSignUp.this,HomePage.class);
-
+                             intent.putExtra("email ID",email);
                              startActivity(intent);
                         }
                     }
@@ -141,7 +146,10 @@ public class LoginAndSignUp extends AppCompatActivity implements View.OnClickLis
                 if(emailID.getText().toString().isEmpty()){
                     Toast.makeText(LoginAndSignUp.this,"Please Enter Your Email Address",Toast.LENGTH_SHORT).show();
                 }else {
-                    startActivity(new Intent(LoginAndSignUp.this, ForgotPassword.class));
+                    Intent forgotIntent = new Intent(LoginAndSignUp.this,ForgotPassword.class);
+                    forgotIntent.putExtra("email",emailID.getText().toString());
+                    startActivity(forgotIntent);
+
                 }
 
 
@@ -254,6 +262,7 @@ public class LoginAndSignUp extends AppCompatActivity implements View.OnClickLis
 
     }
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        final String actid = acct.getEmail();
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -267,7 +276,9 @@ public class LoginAndSignUp extends AppCompatActivity implements View.OnClickLis
                             FirebaseUser user = mAuth.getCurrentUser();
                             if(user!=null)
                             {
-                                startActivity(new Intent(LoginAndSignUp.this,HomePage.class));
+                                Intent gmailIntent = new Intent(LoginAndSignUp.this,HomePage.class);
+                                gmailIntent.putExtra("email ID",actid);
+                                startActivity(gmailIntent);
                             }
 
                         } else {

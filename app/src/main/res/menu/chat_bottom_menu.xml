@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bottom_chat_chats"
+        android:icon="@drawable/home"
+        android:title="Chats" />
+    <item
+        android:id="@+id/bottom_chat_status"
+        android:icon="@drawable/notification"
+        android:title="Status" />
+    <item
+        android:id="@+id/bottom_chat_allusers"
+        android:icon="@drawable/person"
+        android:title="All users" />
+</menu>

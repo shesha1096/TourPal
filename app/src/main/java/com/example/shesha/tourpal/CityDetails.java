@@ -1,5 +1,6 @@
 package com.example.shesha.tourpal;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.provider.DocumentsContract;
 import android.support.annotation.NonNull;
@@ -10,11 +11,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -31,7 +34,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -44,6 +49,8 @@ public class CityDetails extends AppCompatActivity {
     private TextView citydetails;
     private String namelist[],response,imgurl;
     private ImageView cityView;
+    private FirebaseFirestore firebaseFirestore1;
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,21 +59,31 @@ public class CityDetails extends AppCompatActivity {
         city = (TextView) findViewById(R.id.citytitle);
         citydetails = (TextView) findViewById(R.id.citydescription);
         itineraryButton = (Button) findViewById(R.id.createItineraryID);
+        firebaseFirestore1 = FirebaseFirestore.getInstance();
         cityView = (ImageView) findViewById(R.id.citypic);
          extras =getIntent().getExtras();
         cityname = extras.getString("City");
+        email = extras.getString("email");
         firebaseFirestore = FirebaseFirestore.getInstance();
+        final ProgressDialog progressDialog = new ProgressDialog(CityDetails.this);
+        progressDialog.setTitle("Please Wait");
+        progressDialog.setMessage("Please wait");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
         firebaseFirestore.collection(cityname).document("citydesc").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
+                    if(!task.getResult().exists()){
+                        response = "There is no description available for this place currently.";
+
+                    }
+                    progressDialog.dismiss();
                     DocumentSnapshot documentSnapshot = task.getResult();
                     if (documentSnapshot != null && documentSnapshot.exists()) {
                         response = documentSnapshot.getString("description");
                         imgurl = documentSnapshot.getString("image");
                         Log.d("Text", response);
-                    } else {
-                        response = "There is no description available for this place currently.";
                     }
                 }
                 citydetails.setText(response);
@@ -87,10 +104,24 @@ public class CityDetails extends AppCompatActivity {
         itineraryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new  Intent(CityDetails.this,Itinerary.class);
-                intent.putExtra("City List",namelist);
-                intent.putExtra("City Name",cityname);
-                startActivity(intent);
+                Map<String,Object> visitMap = new HashMap<>();
+                visitMap.put("placesvisited",cityname);
+                firebaseFirestore1.collection(email).document("Details").set(visitMap,SetOptions.merge()).addOnCompleteListener(CityDetails.this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Intent intent=new  Intent(CityDetails.this,Itinerary.class);
+                            intent.putExtra("City List",namelist);
+                            intent.putExtra("City Name",cityname);
+                            startActivity(intent);
+
+                        }else{
+                            Toast.makeText(CityDetails.this,"Something went wrong",Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+
             }
         });
     }
